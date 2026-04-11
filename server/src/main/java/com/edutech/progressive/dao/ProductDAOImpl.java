@@ -32,7 +32,12 @@ public class ProductDAOImpl implements ProductDAO {
             if (rowsAffected > 0) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
-                        return rs.getInt(1);
+                        int generatedId = rs.getInt(1);
+
+                        // Fix: assign generated ID back to object
+                        product.setProductId(generatedId);
+
+                        return generatedId;
                     }
                 }
             }
@@ -69,16 +74,17 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public void updateProduct(Product product) throws SQLException {
-        String sql = "UPDATE product SET product_name = ?, product_description = ?, quantity = ?, price = ? WHERE product_id = ?";
+        String sql = "UPDATE product SET warehouse_id = ?, product_name = ?, product_description = ?, quantity = ?, price = ? WHERE product_id = ?";
 
         try (Connection connection = DatabaseConnectionManager.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            ps.setString(1, product.getProductName());
-            ps.setString(2, product.getProductDescription());
-            ps.setInt(3, product.getQuantity());
-            ps.setBigDecimal(4, BigDecimal.valueOf(product.getPrice()));
-            ps.setInt(5, product.getProductId());
+            ps.setInt(1, product.getWarehouseId());
+            ps.setString(2, product.getProductName());
+            ps.setString(3, product.getProductDescription());
+            ps.setInt(4, product.getQuantity());
+            ps.setBigDecimal(5, BigDecimal.valueOf(product.getPrice()));
+            ps.setInt(6, product.getProductId());
 
             ps.executeUpdate();
         }
