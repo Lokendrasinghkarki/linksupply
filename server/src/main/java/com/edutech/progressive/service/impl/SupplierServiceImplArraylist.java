@@ -7,9 +7,9 @@ import java.util.List;
 import com.edutech.progressive.entity.Supplier;
 import com.edutech.progressive.service.SupplierService;
 
-public class SupplierServiceImplArraylist implements SupplierService 
-{
-    private static List<Supplier> supplierList = new ArrayList<>();
+public class SupplierServiceImplArraylist implements SupplierService {
+    
+    private static List<Supplier> supplierList=new ArrayList<>();
 
     @Override
     public List<Supplier> getAllSuppliers() {
@@ -25,7 +25,7 @@ public class SupplierServiceImplArraylist implements SupplierService
     @Override
     public List<Supplier> getAllSuppliersSortedByName() {
         List<Supplier> sortedSupplier = supplierList;
-        sortedSupplier.sort(Comparator.comparing(Supplier::getSupplierName)); 
+        sortedSupplier.sort(Comparator.comparing(Supplier::getSupplierName));
         return sortedSupplier;
     }
 
