@@ -1,5 +1,18 @@
 package com.edutech.progressive.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 
-public interface SupplierRepository {
+import com.edutech.progressive.entity.Supplier;
+
+@Repository
+public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
+    @Query("delete from Supplier s where s.supplierId = :supplierId")
+    void deleteBySupplierId(@Param("supplierId") int supplierId);
+
+    @Query("select s from Supplier s where s.supplierId= :supplierId")
+    Supplier findBySupplierId(@Param("supplierId") int supplierId);
 }
