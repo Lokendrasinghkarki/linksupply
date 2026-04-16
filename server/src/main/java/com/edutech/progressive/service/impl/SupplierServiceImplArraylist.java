@@ -11,8 +11,8 @@ import com.edutech.progressive.service.SupplierService;
 
 @Service
 public class SupplierServiceImplArraylist implements SupplierService {
-    
-    private static List<Supplier> supplierList=new ArrayList<>();
+
+    List<Supplier> supplierList = new ArrayList<>();
 
     @Override
     public List<Supplier> getAllSuppliers() {
@@ -28,7 +28,7 @@ public class SupplierServiceImplArraylist implements SupplierService {
     @Override
     public List<Supplier> getAllSuppliersSortedByName() {
         List<Supplier> sortedSupplier = supplierList;
-        sortedSupplier.sort(Comparator.comparing(Supplier::getSupplierName));
+        sortedSupplier.sort(Comparator.comparing(Supplier::getSupplierName)); 
         return sortedSupplier;
     }
 

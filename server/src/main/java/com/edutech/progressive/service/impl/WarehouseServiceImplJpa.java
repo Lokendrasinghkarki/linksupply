@@ -1,44 +1,74 @@
 package com.edutech.progressive.service.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.edutech.progressive.entity.Warehouse;
+import com.edutech.progressive.exception.NoWarehouseFoundForSupplierException;
+import com.edutech.progressive.repository.WarehouseRepository;
 import com.edutech.progressive.service.WarehouseService;
 
+@Service
 public class WarehouseServiceImplJpa implements WarehouseService {
 
-    List<Warehouse> warehouses = new ArrayList<>();
+
+    
+    private WarehouseRepository warehouseRepository;
+    
+
+    
+    
+    @Autowired
+    public WarehouseServiceImplJpa(WarehouseRepository warehouseRepository) {
+        this.warehouseRepository = warehouseRepository;
+    }
 
     @Override
     public List<Warehouse> getAllWarehouses() {
-        return warehouses;
+        return warehouseRepository.findAll();
     }
 
     @Override
     public int addWarehouse(Warehouse warehouse) {
-        return -1;
+        Warehouse savedWarehouse = warehouseRepository.save(warehouse);
+        return savedWarehouse.getWarehouseId();
     }
 
     @Override
-    public List<Warehouse> getWarehousesSortedByCapacity() {
+    public List<Warehouse> getWarehousesSortedByCapacity(){
+        List<Warehouse> warehouses = warehouseRepository.findAll();
+        Collections.sort(warehouses);
         return warehouses;
     }
 
-    public void updateWarehouse(Warehouse warehouse) {
+    public void updateWarehouse(Warehouse warehouse){
+        warehouseRepository.save(warehouse);
 
     }
 
-    public void deleteWarehouse(int warehouseId) {
+    public void deleteWarehouse(int warehouseId){
+        Warehouse warehouse = warehouseRepository.findByWarehouseId(warehouseId);
+        warehouseRepository.delete(warehouse);
 
     }
 
-    public List<Warehouse> getWarehouseBySupplier(int supplierId) {
-        return null;
+    public Warehouse getWarehouseById(int warehouseId){
+        return warehouseRepository.findByWarehouseId(warehouseId);
+
     }
 
-    public Warehouse getWarehouseById(int warehouseId) {
-        return null;
+
+    public List<Warehouse> getWarehouseBySupplier(int supplierId){
+        List<Warehouse> warehouses = warehouseRepository.findAllBySupplier_SupplierId(supplierId);
+        if(warehouses.isEmpty()){
+            throw new NoWarehouseFoundForSupplierException("No warehouse found");
+        }
+        return warehouses;
     }
-    
+
 }

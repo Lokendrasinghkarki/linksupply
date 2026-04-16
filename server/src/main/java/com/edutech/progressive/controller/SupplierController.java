@@ -1,12 +1,10 @@
 package com.edutech.progressive.controller;
 
 import com.edutech.progressive.entity.Supplier;
-import com.edutech.progressive.service.SupplierService;
 import com.edutech.progressive.service.impl.SupplierServiceImplArraylist;
 import com.edutech.progressive.service.impl.SupplierServiceImplJpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,13 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/supplier")
 public class SupplierController {
-
-       
+    
     @Autowired
     private SupplierServiceImplArraylist supplierServiceImplArraylist;
 
@@ -31,13 +29,13 @@ public class SupplierController {
     private SupplierServiceImplJpa supplierServiceImplJpa;
     
     @GetMapping
-    public ResponseEntity<List<Supplier>> getAllSuppliers() {
+    public ResponseEntity<List<Supplier>> getAllSuppliers() throws SQLException {
         return ResponseEntity.ok(supplierServiceImplJpa.getAllSuppliers());
     }
     
     @GetMapping("/{supplierId}")
     public ResponseEntity<Supplier> getSupplierById(int supplierId) {
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(supplierServiceImplJpa.getSupplierById(supplierId));
     } 
 
     @PostMapping
@@ -70,5 +68,4 @@ public class SupplierController {
     public ResponseEntity<List<Supplier>> getAllSuppliersSortedByNameFromArrayList() {
         return ResponseEntity.ok(supplierServiceImplArraylist.getAllSuppliersSortedByName());
     }
-
 }

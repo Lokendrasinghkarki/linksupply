@@ -1,38 +1,58 @@
 package com.edutech.progressive.service.impl;
 
-import java.util.Collections;
+import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.edutech.progressive.entity.Product;
+import com.edutech.progressive.repository.ProductRepository;
+import com.edutech.progressive.service.ProductService;
 
 @Service
-public class ProductServiceImplJpa {
-    public List<Product> getAllProduct() {
-        return Collections.emptyList();
+public class ProductServiceImplJpa implements ProductService {
+    
+    
+    private ProductRepository productRepository;
+
+    
+    @Autowired
+    public ProductServiceImplJpa(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
-    public Product getProductById(int productId)
-    {
-        return null;
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
     }
 
-    public Product addProduct(Product product)
-    {
-        return null;
+    @Override
+    public Product getProductById(int productId) {
+        return productRepository.findById(productId).get();
     }
-    public Product updateProduct(Product product)
-    {
-        return null;
-    }
-    public void deleteProduct(int productId)
-    {
+    
+    @Override
+    public int addProduct(Product product) {
         
+        Product savedProduct = productRepository.save(product);
+        return savedProduct.getProductId();
     }
-    public List<Product> getAllProduct(int productID)
-    {
-        return null;
+    
+    @Override
+    public void updateProduct(Product product){
+        productRepository.save(product);
     }
+
+    @Override
+    public void deleteProduct(int productId)  {
+        productRepository.deleteById(productId);
+    }
+
+    public List<Product> getAllProductByWarehouse(int warehouseId) {
+        return productRepository.findAllByWarehouse_WarehouseId(warehouseId);
+    }
+
+
 
 }
